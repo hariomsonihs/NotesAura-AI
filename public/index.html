@@ -207,12 +207,54 @@ localStorage.setItem('fontSize', size);
 
 function changeTheme() {
 const theme = document.getElementById('themeSelect').value;
+const body = document.body;
+const sidebar = document.querySelector('.sidebar');
+const topBar = document.querySelector('.top-bar');
+const inputArea = document.querySelector('.input-area');
+const chatArea = document.querySelector('.chat-area');
+const msgContents = document.querySelectorAll('.msg-content.ai');
+
 if (theme === 'light') {
-document.body.style.background = '#f5f5f5';
+body.style.background = '#f5f5f5';
+sidebar.style.background = '#fff';
+sidebar.style.color = '#000';
+sidebar.style.borderRight = '1px solid #ddd';
+topBar.style.background = '#fff';
+topBar.style.color = '#000';
+topBar.style.borderBottom = '1px solid #ddd';
+inputArea.style.background = '#fff';
+inputArea.style.borderTop = '1px solid #ddd';
+chatArea.style.background = '#fff';
+document.querySelectorAll('.history-item').forEach(el => {
+el.style.background = '#f5f5f5';
+el.style.color = '#000';
+});
+document.querySelectorAll('.menu-btn, .theme-btn, .settings-btn').forEach(el => {
+el.style.background = '#f5f5f5';
+el.style.color = '#000';
+});
+document.getElementById('messageInput').style.background = '#f5f5f5';
+document.getElementById('messageInput').style.color = '#000';
 } else if (theme === 'blue') {
-document.body.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+body.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
 } else {
-document.body.style.background = '#0f0f0f';
+body.style.background = '#0f0f0f';
+sidebar.style.background = '#171717';
+sidebar.style.color = '#fff';
+topBar.style.background = '#171717';
+topBar.style.color = '#fff';
+inputArea.style.background = '#171717';
+chatArea.style.background = '#0f0f0f';
+document.querySelectorAll('.history-item').forEach(el => {
+el.style.background = '#1f1f1f';
+el.style.color = '#fff';
+});
+document.querySelectorAll('.menu-btn, .theme-btn, .settings-btn').forEach(el => {
+el.style.background = '#2a2a2a';
+el.style.color = '#fff';
+});
+document.getElementById('messageInput').style.background = '#1f1f1f';
+document.getElementById('messageInput').style.color = '#fff';
 }
 localStorage.setItem('theme', theme);
 }
