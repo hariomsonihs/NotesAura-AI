@@ -305,6 +305,13 @@ if (!chat) return;
 const area = document.getElementById('chatArea');
 area.innerHTML = chat.messages.map(m => `<div class="message ${m.role}"><div class="avatar">${m.role === 'user' ? '👤' : '🤖'}</div><div class="msg-content">${m.role === 'user' ? m.content : parseMessage(m.content)}</div></div>`).join('');
 loadHistory();
+setTimeout(() => {
+area.querySelectorAll('pre code').forEach(block => {
+if (!block.classList.contains('hljs')) {
+hljs.highlightElement(block);
+}
+});
+}, 100);
 area.scrollTop = area.scrollHeight;
 }
 
