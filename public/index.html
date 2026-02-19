@@ -129,20 +129,40 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <button class="close-btn" onclick="closeSettings()">×</button>
 </div>
 <div class="setting-item">
-<label>Model Temperature</label>
-<input type="range" min="0" max="1" step="0.1" value="0.7" id="temperature">
-</div>
-<div class="setting-item">
-<label>Max Tokens</label>
-<input type="number" value="1000" id="maxTokens">
-</div>
-<div class="setting-item">
-<label>Font Size</label>
-<select id="fontSize">
-<option value="14px">Small</option>
+<label>Text Size</label>
+<select id="fontSize" onchange="changeFontSize()">
+<option value="13px">Small</option>
 <option value="15px" selected>Medium</option>
-<option value="16px">Large</option>
+<option value="17px">Large</option>
 </select>
+</div>
+<div class="setting-item">
+<label>Theme</label>
+<select id="themeSelect" onchange="changeTheme()">
+<option value="dark" selected>Dark</option>
+<option value="light">Light</option>
+<option value="blue">Blue</option>
+</select>
+</div>
+<div class="setting-item">
+<label>Auto-scroll</label>
+<select id="autoScroll">
+<option value="on" selected>On</option>
+<option value="off">Off</option>
+</select>
+</div>
+<div class="setting-item">
+<label>Sound Effects</label>
+<select id="soundFx">
+<option value="on">On</option>
+<option value="off" selected>Off</option>
+</select>
+</div>
+<div class="setting-item">
+<button class="new-chat-btn" onclick="exportChats()">📥 Export Chats</button>
+</div>
+<div class="setting-item">
+<button class="new-chat-btn" onclick="clearAllChats()" style="background: #ef4444;">🗑️ Clear All History</button>
 </div>
 </div>
 </div>
@@ -177,6 +197,42 @@ document.getElementById('settingsModal').classList.add('active');
 
 function closeSettings() {
 document.getElementById('settingsModal').classList.remove('active');
+}
+
+function changeFontSize() {
+const size = document.getElementById('fontSize').value;
+document.querySelectorAll('.msg-content').forEach(el => el.style.fontSize = size);
+localStorage.setItem('fontSize', size);
+}
+
+function changeTheme() {
+const theme = document.getElementById('themeSelect').value;
+if (theme === 'light') {
+document.body.style.background = '#f5f5f5';
+} else if (theme === 'blue') {
+document.body.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+} else {
+document.body.style.background = '#0f0f0f';
+}
+localStorage.setItem('theme', theme);
+}
+
+function exportChats() {
+const data = JSON.stringify(chats, null, 2);
+const blob = new Blob([data], { type: 'application/json' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = 'notesaura-chats.json';
+a.click();
+}
+
+function clearAllChats() {
+if (confirm('Delete all chat history?')) {
+chats = [];
+localStorage.removeItem('chats');
+newChat();
+}
 }
 
 function newChat() {
