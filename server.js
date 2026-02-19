@@ -69,10 +69,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
 app.post('/chat', async (req, res) => {
     try {
         const { message } = req.body;
@@ -81,9 +77,14 @@ app.post('/chat', async (req, res) => {
             return res.status(400).json({ error: 'No message provided' });
         }
 
+        // Build messages - system first, then history, then current user message
         const messages = [{ role: 'system', content: NOTESAURA_CONTEXT }];
+        
+        // Add recent conversation history (last 10 messages)
         const recentHistory = conversationHistory.slice(-10);
         messages.push(...recentHistory);
+        
+        // Add current user message
         messages.push({ role: 'user', content: message });
 
         const response = await client.chat.completions({ 
@@ -92,6 +93,7 @@ app.post('/chat', async (req, res) => {
         });
         const aiMessage = response.choices[0].message.content;
 
+        // Now add to history after successful response
         conversationHistory.push({ role: 'user', content: message });
         conversationHistory.push({ role: 'assistant', content: aiMessage });
 

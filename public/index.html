@@ -774,7 +774,6 @@
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
-        let conversationHistory = [];
 
         // Configure marked for better rendering
         marked.setOptions({
@@ -920,7 +919,6 @@
             if (!message) return;
             
             addMessage(message, true);
-            conversationHistory.push({ role: 'user', content: message });
             messageInput.value = '';
             messageInput.style.height = 'auto';
             
@@ -928,15 +926,12 @@
             showTyping();
             
             try {
-                const response = await fetch('/api/chat', {
+                const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ 
-                        message: message,
-                        history: conversationHistory.slice(0, -1)
-                    })
+                    body: JSON.stringify({ message: message })
                 });
                 
                 const data = await response.json();
@@ -945,15 +940,12 @@
                 
                 if (data.success) {
                     addMessage(data.response, false);
-                    conversationHistory.push({ role: 'assistant', content: data.response });
                 } else {
                     addErrorMessage(data.error || 'Something went wrong');
-                    conversationHistory.pop();
                 }
             } catch (error) {
                 hideTyping();
                 addErrorMessage('Failed to connect to server');
-                conversationHistory.pop();
             } finally {
                 sendBtn.disabled = false;
                 messageInput.focus();
@@ -976,22 +968,30 @@
         async function clearChat() {
             if (!confirm('Clear conversation history?')) return;
             
-            conversationHistory = [];
-            chatMessages.innerHTML = `
-                <div class="message ai">
-                    <div class="message-avatar">AI</div>
-                    <div class="message-content">
-                        <p>Hello! I'm NotesAura AI, your intelligent assistant. I can help you with:</p>
-                        <ul>
-                            <li>Programming and coding questions</li>
-                            <li>Explanations and tutorials</li>
-                            <li>Problem-solving and debugging</li>
-                            <li>General knowledge and information</li>
-                        </ul>
-                        <p>How can I assist you today?</p>
+            try {
+                await fetch('/clear', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                chatMessages.innerHTML = `
+                    <div class="message ai">
+                        <div class="message-avatar">AI</div>
+                        <div class="message-content">
+                            <p>Hello! I'm NotesAura AI, your intelligent assistant. I can help you with:</p>
+                            <ul>
+                                <li>Programming and coding questions</li>
+                                <li>Explanations and tutorials</li>
+                                <li>Problem-solving and debugging</li>
+                                <li>General knowledge and information</li>
+                            </ul>
+                            <p>How can I assist you today?</p>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            } catch (error) {
+                addErrorMessage('Failed to clear conversation');
+            }
         }
 
         window.onload = () => {
