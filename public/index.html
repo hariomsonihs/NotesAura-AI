@@ -926,7 +926,7 @@
             showTyping();
             
             try {
-                const response = await fetch('/chat', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -969,7 +969,7 @@
             if (!confirm('Clear conversation history?')) return;
             
             try {
-                await fetch('/clear', {
+                await fetch('/api/clear', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
