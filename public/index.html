@@ -375,6 +375,13 @@ if (!block.classList.contains('hljs')) {
 hljs.highlightElement(block);
 }
 });
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+const msgContent = div.querySelector('.msg-content');
+msgContent.style.background = '#f5f5f5';
+msgContent.style.color = '#000';
+msgContent.style.borderColor = '#ddd';
+}
 }
 area.scrollTop = area.scrollHeight;
 }
@@ -442,7 +449,7 @@ if (chats.length === 0) newChat();
 else { currentChatId = chats[chats.length - 1].id; loadChat(currentChatId); }
 loadHistory();
 
-const savedTheme = localStorage.getItem('theme');
+const savedTheme = localStorage.getItem('theme') || 'dark';
 if (savedTheme) {
 document.getElementById('themeSelect').value = savedTheme;
 changeTheme();
