@@ -307,10 +307,11 @@ newChat();
 
 function newChat() {
 currentChatId = Date.now();
-chats.push({ id: currentChatId, title: 'New Chat', messages: [] });
+const welcomeMsg = { role: 'ai', content: "Hello! I'm NotesAura AI. How can I help you today?" };
+chats.push({ id: currentChatId, title: 'New Chat', messages: [welcomeMsg] });
 saveChats();
 loadHistory();
-document.getElementById('chatArea').innerHTML = '<div class="message ai"><div class="avatar">🤖</div><div class="msg-content"><p>Hello! I\'m NotesAura AI Pro. How can I help you today?</p></div></div>';
+document.getElementById('chatArea').innerHTML = '<div class="message ai"><div class="avatar">🤖</div><div class="msg-content"><p>Hello! I\'m NotesAura AI. How can I help you today?</p></div></div>';
 }
 
 function loadHistory() {
@@ -440,6 +441,18 @@ input.focus();
 if (chats.length === 0) newChat();
 else { currentChatId = chats[chats.length - 1].id; loadChat(currentChatId); }
 loadHistory();
+
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+document.getElementById('themeSelect').value = savedTheme;
+changeTheme();
+}
+
+const savedFontSize = localStorage.getItem('fontSize');
+if (savedFontSize) {
+document.getElementById('fontSize').value = savedFontSize;
+changeFontSize();
+}
 </script>
 </body>
 </html>
