@@ -197,8 +197,8 @@ localStorage.setItem('chats', JSON.stringify(chats));
 
 function parseMessage(content) {
 let html = marked.parse(content);
-html = html.replace(/<pre><code class="language-(\\w+)">([\\s\\S]*?)<\\/code><\\/pre>/g, (m, lang, code) => `<pre><code class="language-${lang}">${code}</code><button class="copy-btn" onclick="copyCode(this)">📋</button></pre>`);
-html = html.replace(/<pre><code>([\\s\\S]*?)<\\/code><\\/pre>/g, (m, code) => `<pre><code>${code}</code><button class="copy-btn" onclick="copyCode(this)">📋</button></pre>`);
+html = html.replace(/<pre><code class="language-(\w+)">([\s\S]*?)<\/code><\/pre>/g, (m, lang, code) => `<pre><code class="language-${lang}">${code}</code><button class="copy-btn" onclick="copyCode(this)">📋</button></pre>`);
+html = html.replace(/<pre><code>([\s\S]*?)<\/code><\/pre>/g, (m, code) => `<pre><code>${code}</code><button class="copy-btn" onclick="copyCode(this)">📋</button></pre>`);
 return html;
 }
 
