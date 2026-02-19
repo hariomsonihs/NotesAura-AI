@@ -240,7 +240,8 @@ document.getElementById('sendBtn').disabled = true;
 document.getElementById('typing').classList.add('active');
 
 try {
-const res = await fetch('/api/chat', {
+const apiUrl = window.location.hostname === 'localhost' ? '/chat' : '/api/chat';
+const res = await fetch(apiUrl, {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({ message, history: chat.messages.slice(0, -1) })
